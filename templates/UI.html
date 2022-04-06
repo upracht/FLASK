@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> LE-TEHNIKA MINI by FLASK</title>
+    <script src="/js/jquery-3.6.0.min.js"></script>
+    <script src="/js/cooler.js"></script>
+    <script src="/js/cooler.js?u={{ last_updated }}"></script>
+    <meta http-equiv="refresh" content="10">
+    <style>
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance:none;
+		margin: 0}
+	input::-webkit-input-placeholder {
+		color:white}
+	input:focus::placeholder {
+		color:transparent;
+		}
+	input {
+		display:inline_block;
+		color: white;
+		background-color:#007eec;
+		text-align:center;
+		font-weight:bold;
+		font-size:20px;
+		font-family:Verdana;
+		width: 144px;
+		height: 93px;
+		border:1px;
+		border-style:solid;
+		border-color:black
+
+		}
+	.button1 {
+		width: 150px;
+		height: 93px;
+		border: 1px;
+		border-style:solid;
+		color: black;
+		background-color: #cad4de;
+		border-color:black;
+		text-align:center;
+		display: inline-block;
+		cursor: pointer;
+		transition-duration: 0.4s;
+		border-radius:0px;
+		font-size:12px;
+		font-family:Verdana;
+
+		}
+<!--
+	.button1:hover {
+		background-color: #007eec;
+		color:white;
+		}
+-->
+	.field {
+		width: 148px;
+		height: 93px;
+		border: 1px;
+		border-style:solid;
+		border-color:black;
+		background-color: #007eec;
+		line-height: 93px;
+		align-items:center;
+		display: inline-block;
+		transition-duration: 0.4s;
+		color:white;
+		font-weight:bold;
+		font-size:12px;
+		font-family:Verdana;
+		}
+	.field2 {
+		width: 148px;
+		height: 93px;
+		border: 1px;
+		border-style:solid;
+		border-color:black;
+		background-color: #007eec;
+		line-height: 93px;
+		align-items:center;
+		display: inline-block;
+		transition-duration: 0.4s;
+		color:white;
+		font-weight:bold;
+		font-size:10px;
+		font-family:Verdana;
+		}
+
+	.field:hover {
+		background-color: #007eec;
+		color:white;
+		}		
+    </style>
+</head>
+
+<body style="background-color: black">
+
+<p>
+<img src="{{ url_for('static', filename='1024px-Festo_logo.png') }}" width="150" style="float:right; margin:10px 40px">
+</p>
+<br><br>
+
+<p>
+<center>
+<button class="button1" type="button" id="PreButton">Precool State</button><!--
+--><button class="button1" type="button" id="PinnButton">Pinning State</button>
+</center>
+<center>
+<button class="button1"  type="button" id="BaseButton">Base T State</button><!--
+--><button class="button1"type="button" id="OffButton">Stop Cooler</button>
+</center>
+<center>
+<button class="button1"  type="button" id="ButtonDownload">Create Report</button><!--
+--><button class="button1" type="button" onclick="window.location.href='/down';">Download Report</button>
+</center>
+
+
+
+
+<center>
+<div class="field">
+{{ T }}°C
+</div><!--
+--><div class="field">
+{{ rpm }} rpm
+</div>
+</center>
+
+
+</body>
+</html> 
