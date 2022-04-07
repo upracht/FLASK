@@ -21,11 +21,18 @@ pip3 install adafruit-circuitpython-fxas21002c
 pip3 install adafruit-circuitpython-fxos8700
 rm raspi-blinka.py
 
-cronjob="@reboot bash /home/supramotion/app-init.sh"
+
+path=$(pwd)
+cronjob="@reboot bash $path/app-init.sh"
 (crontab -u supramotion -l; echo "$cronjob") | crontab -u supramotion -
 
-cronjob="@reboot bash /home/supramotion/log-init.sh"
+cronjob="@reboot bash $path/log-init.sh"
 (crontab -u supramotion -l; echo "$cronjob") | crontab -u supramotion -
 
-cronjob="0 0 * * * bash /home/supramotion/vacuum.sh"
+cronjob="0 0 * * * bash $path/vacuum.sh"
 (crontab -u supramotion -l; echo "$cronjob") | crontab -u supramotion -
+
+curl -sL https://install.raspap.com > AP.sh
+bash AP.sh -y
+rm AP.sh
+
