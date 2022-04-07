@@ -23,6 +23,12 @@ rm raspi-blinka.py
 
 
 path=$(pwd)
+
+echo "export PYTHONPATH:$PYTHONPATH:$path/backend" > app-init.sh
+echo "python3 $path/app.py & > /dev/null" >> app-init.sh
+
+
+
 cronjob="@reboot bash $path/app-init.sh"
 (crontab -u supramotion -l; echo "$cronjob") | crontab -u supramotion -
 
