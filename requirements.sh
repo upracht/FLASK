@@ -24,7 +24,7 @@ rm raspi-blinka.py
 
 path=$(pwd)
 
-echo "export PYTHONPATH:$PYTHONPATH:$path/backend" > app-init.sh
+echo "export PYTHONPATH:\$PYTHONPATH:$path/backend" > app-init.sh
 echo "python3 $path/app.py & > /dev/null" >> app-init.sh
 
 
