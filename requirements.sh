@@ -36,3 +36,8 @@ curl -sL https://install.raspap.com > AP.sh
 bash AP.sh -y
 rm AP.sh
 
+echo "___________"
+echo "System preparation finished
+echo "After reboot, connect to raspi-webgui netowrk (psw ChangeMe)"
+echo "and access the cryostat at https://10.3.141.1:13378/user (this is the default)"
+echo "You may change network settings at https://10.3.141.1 (Username: admin Password: secret)"
