@@ -47,13 +47,13 @@ echo "python3 $path/app.py & > /dev/null" >> app-init.sh
 
 
 cronjob="@reboot bash $path/app-init.sh"
-(crontab -u supramotion -l; echo "$cronjob") | crontab -u supramotion -
+(crontab -u pi -l; echo "$cronjob") | crontab -u pi -
 
 cronjob="@reboot bash $path/log-init.sh"
-(crontab -u supramotion -l; echo "$cronjob") | crontab -u supramotion -
+(crontab -u pi -l; echo "$cronjob") | crontab -u pi -
 
 cronjob="0 0 * * * bash $path/vacuum.sh"
-(crontab -u supramotion -l; echo "$cronjob") | crontab -u supramotion -
+(crontab -u pi -l; echo "$cronjob") | crontab -u pi -
 
 curl -sL https://install.raspap.com > AP.sh
 bash AP.sh -y
