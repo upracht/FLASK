@@ -18,9 +18,10 @@ fi
 
 yes | apt install python3-pip
 yes | apt install  libatlas-base-dev
+yes | apt install  libjpeg-dev
 
 pip3 install numpy
-#pip3 install pillow==9.0.1
+
 pip3 install matplotlib
 pip3 install scipy
 pip3 install pi-ina219
@@ -40,20 +41,20 @@ rm raspi-blinka.py
 
 
 path=$(pwd)
-
-echo "export PYTHONPATH:\$PYTHONPATH:$path/backend" > app-init.sh
+user=$(whoami)
+echo "export PYTHONPATH=\$PYTHONPATH:$path/backend" > app-init.sh
 echo "python3 $path/app.py & > /dev/null" >> app-init.sh
 
 
 
 cronjob="@reboot bash $path/app-init.sh"
-(crontab -u pi -l; echo "$cronjob") | crontab -u pi -
+(crontab -u $user -l; echo "$cronjob") | crontab -u $user -
 
 cronjob="@reboot bash $path/log-init.sh"
-(crontab -u pi -l; echo "$cronjob") | crontab -u pi -
+(crontab -u $user -l; echo "$cronjob") | crontab -u $user -
 
 cronjob="0 0 * * * bash $path/vacuum.sh"
-(crontab -u pi -l; echo "$cronjob") | crontab -u pi -
+(crontab -u $user -l; echo "$cronjob") | crontab -u $user -
 
 curl -sL https://install.raspap.com > AP.sh
 bash AP.sh -y
