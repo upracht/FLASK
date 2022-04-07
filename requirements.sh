@@ -2,7 +2,7 @@
 echo "This routine prepares your System to run the SupraMotion Cryostat Software Suite"
 echo "It is highly automated and does not require user input."
 echo "Checking, if the system needs to reboot first ..."
-if [ -d /var/run/reboot-required ]; then
+if ! [ -d /var/run/reboot-required ]; then
   echo '... reboot required'
   sleep 2
   reboot
