@@ -15,7 +15,10 @@ time.sleep(40)
 
 
 # Initialize webframework and required APIs
-ip = '10.0.0.1'
+#ip = '10.0.0.1'
+
+os.system("hostname -I > tmp")
+ip = os.popen("head tmp").read().split(' ')[0]
 root = os.getcwd()
 app = Flask(__name__, template_folder=f"{root}/templates/")
 api = Api(app)
