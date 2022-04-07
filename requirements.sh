@@ -1,9 +1,16 @@
 #!/bin/bash
 
+if [ -f /var/run/reboot-required ]; then
+  echo 'reboot required. Rebooting in 10s'
+  sleep(10)
+  reboot
+fi
+
 yes | apt install python3-pip
 yes | apt install  libatlas-base-dev
 
 pip3 install numpy
+pip3 install pillow==9.0.1
 pip3 install matplotlib
 pip3 install scipy
 pip3 install pi-ina219
