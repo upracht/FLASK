@@ -1,3 +1,6 @@
+import sys
+root = "/home/pi/FLASK"
+sys.path.append(f"{root}/backend")
 
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gsp
@@ -8,7 +11,6 @@ import datetime as dt
 import numpy as np
 from datetime import timedelta as delta
 
-root = os.getcwd()
 
 
 ''' Functions for live plot'''
