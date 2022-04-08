@@ -1,3 +1,8 @@
+import sys
+root = "/home/pi/FLASK"
+sys.path.append(f"{root}/backend")
+
+
 from cooler import Cooler
 from flask_restful import Resource, reqparse
 import time
