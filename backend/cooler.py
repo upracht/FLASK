@@ -1,3 +1,7 @@
+import sys
+root = "/home/pi/FLASK"
+sys.path.append(f"{root}/backend")
+
 import board, digitalio, adafruit_max31865
 from pymodbus.client.sync import ModbusSerialClient
 import time, os
@@ -5,10 +9,9 @@ import datetime as dt
 import numpy as np
 from zipfile import ZipFile
 
-root = os.getcwd()
 
 class Cooler():
-	def __init__(self):
+	def __init__(self, error='tbd'):
  		# MODBUS INIT
 		i, con = 0, False
 		while con == False:
@@ -122,62 +125,62 @@ class Cooler():
 
 		return bundle_name
 
-def vacuum_test(spi, base=-212, max_hours_down=3, heat_break_rpm=0):
-	self.cmd.log('Start performance test')
-	if self.read(8) == 10768:    # pinning mode 
-		self.write(8,14000)
+	def vacuum_test(spi, base=-212, max_hours_down=3, heat_break_rpm=0):
+		self.cmd.log('Start performance test')
+		if self.read(8) == 10768:    # pinning mode 
+			self.write(8,14000)
 		
-		init_time = dt.datetime.now()
-		reach = True
-		while self.PT100(spi)[0] > base and reach:
-			time.sleep(1)
-			if dt.datetime.now() > init_time + dt.timedelta(hours=max_hours_down):
-				reach = False
-				self.cmd_log('ABORT performance test: did no reach base T')
+			init_time = dt.datetime.now()
+			reach = True
+			while self.PT100(spi)[0] > base and reach:
+				time.sleep(1)
+				if dt.datetime.now() > init_time + dt.timedelta(hours=max_hours_down):
+					reach = False
+					self.cmd_log('ABORT performance test: did no reach base T')
 
-		if heat_break_rpm == 0:
-			self.write(8,10000)
-			init_time_up = dt.datetime.now()
-			while self.PT100(spi)[0] < -210:
-				pass
-			self.write(8,10786)
-			
-			if reach:
-				time_up = (dt.datetime.now() - init_time_up).total_seconds()
-				if not os.path.isfile(f'{root}/log/performance_log.txt'):			
-					with open(f'{root}/log/performance_log.txt', 'w+') as f:
-						line = "date\twarming time (s)\t motor load (RPM)\n"
+			if heat_break_rpm == 0:
+				self.write(8,10000)
+				init_time_up = dt.datetime.now()
+				while self.PT100(spi)[0] < -210:
+					pass
+				self.write(8,10786)
+
+				if reach:
+					time_up = (dt.datetime.now() - init_time_up).total_seconds()
+					if not os.path.isfile(f'{root}/log/performance_log.txt'):			
+						with open(f'{root}/log/performance_log.txt', 'w+') as f:
+							line = "date\twarming time (s)\t motor load (RPM)\n"
+							f.write(line)
+					with open(f'{root}/log/performance_log.txt', 'a+') as f:
+						line = f"{dt.datetime.now().date()}\t{time_up}\t{heat_break_rpm}\n"
 						f.write(line)
-				with open(f'{root}/log/performance_log.txt', 'a+') as f:
-					line = f"{dt.datetime.now().date()}\t{time_up}\t{heat_break_rpm}\n"
-					f.write(line)
-				
-				self.cmd_log('Finished performance test')
+
+					self.cmd_log('Finished performance test')
+
+			else:
+				self.write(6,heat_break_rpm)
+				init_time_up = dt.datetime.now()
+				while self.PT100(spi)[0] < -210:
+					pass
+
+				self.write(5,1)
+				time.sleep(1)
+				self.write(8,10768)
+
+				if reach:
+					time_up = (dt.datetime.now() - init_time_up).total_seconds()
+					if not os.path.isfile(f'{root}/log/performance_log.txt'):			
+						with open('{root}/log/performance_log.txt', 'w+') as f:
+							line = "date\twarming time (s)\tmotor load (RPM)\n"
+							f.write(line)
+					with open(f'{root}/log/performance_log.txt', 'a+') as f:
+						line = f"{dt.datetime.now().date()}\t{time_up}\t{heat_break_rpm}\n"
+						f.write(line)
+
+					self.cmd_log('Finished performance test')
 
 		else:
-			self.write(6,heat_break_rpm)
-			init_time_up = dt.datetime.now()
-			while self.PT100(spi)[0] < -210:
-				pass
+			self.cmd_log('Could not start peformance test routine because cryostat is not in pinning state')
 
-			self.write(5,1)
-			time.sleep(1)
-			self.write(8,10768)
-
-			if reach:
-				time_up = (dt.datetime.now() - init_time_up).total_seconds()
-				if not os.path.isfile(f'{root}/log/performance_log.txt'):			
-					with open('{root}/log/performance_log.txt', 'w+') as f:
-						line = "date\twarming time (s)\tmotor load (RPM)\n"
-						f.write(line)
-				with open(f'{root}/log/performance_log.txt', 'a+') as f:
-					line = f"{dt.datetime.now().date()}\t{time_up}\t{heat_break_rpm}\n"
-					f.write(line)
-				
-				self.cmd_log('Finished performance test')
-
-	else:
-		self.cmd_log('Could not start peformance test routine because cryostat is not in pinning state')
-	
 
 
