@@ -1,4 +1,9 @@
 #!/usr/bin/python3
+import sys
+root = "/home/pi/FLASK"
+sys.path.append(f"{root}/backend")
+
+
 import time, os, busio, board
 import datetime as dt
 
@@ -19,7 +24,6 @@ time.sleep(40)
 
 os.system("hostname -I > tmp")
 ip = os.popen("head tmp").read().split(' ')[0]
-root = os.getcwd()
 app = Flask(__name__, template_folder=f"{root}/templates/")
 api = Api(app)
 api.add_resource(PreHandler, '/api/Pre')
@@ -90,7 +94,7 @@ def download():
 # Link to vacuum performance test
 @app.route("/vacuum_performance_test")
 def vac_test():
-	ans = c.vacuum_test(spi)
+	ans = sri.vacuum_test(spi)
 	return ans
 
 if __name__ == '__main__':
