@@ -42,19 +42,16 @@ rm raspi-blinka.py
 
 path=$(pwd)
 user=$(whoami)
-echo "export PYTHONPATH=\$PYTHONPATH:$path/backend" > app-init.sh
-echo "python3 $path/app.py & > /dev/null" >> app-init.sh
 
-
-
-cronjob="@reboot bash $path/app-init.sh"
+cronjob="@reboot python3 $path/app.py"
 (crontab -u $user -l; echo "$cronjob") | crontab -u $user -
 
-cronjob="@reboot bash $path/log-init.sh"
+cronjob="@reboot bash $path/log.sh"
 (crontab -u $user -l; echo "$cronjob") | crontab -u $user -
 
 cronjob="0 0 * * * bash $path/vacuum.sh"
 (crontab -u $user -l; echo "$cronjob") | crontab -u $user -
+
 
 curl -sL https://install.raspap.com > AP.sh
 bash AP.sh -y
