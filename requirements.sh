@@ -1,4 +1,6 @@
 #!/bin/bash
+
+
 echo "This routine prepares your System to run the SupraMotion Cryostat Software Suite"
 echo "It is highly automated and does not require user input."
 echo "Checking, if the system needs to reboot first ..."
@@ -56,6 +58,9 @@ cronjob="0 0 * * * bash $path/vacuum.sh"
 curl -sL https://install.raspap.com > AP.sh
 bash AP.sh -y
 rm AP.sh
+
+mkdir log
+
 
 echo "___________"
 echo "System preparation finished"
