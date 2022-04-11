@@ -8,6 +8,7 @@ import board, digitalio, adafruit_max31865
 from pymodbus.client.sync import ModbusSerialClient
 import time, os, csv
 import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
 
 
 def log(spi):
