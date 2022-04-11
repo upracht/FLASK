@@ -8,7 +8,17 @@ import time, os
 import datetime as dt
 import numpy as np
 from zipfile import ZipFile
+from csv import reader
 
+with open(f"{root}/static/discrete_data.txt") as f:
+	R  = reader
+	for row in R:
+		if "-180 <" in row:
+			V_pre = int(row.split(' <=> ')[1])
+		elif "-210 <" in row:
+			V_pinn = int(row.split(' <=> ')[1])
+		else:
+			pass
 
 class Cooler():
 	def __init__(self, error='tbd'):
@@ -127,7 +137,7 @@ class Cooler():
 
 	def vacuum_test(spi, base=-212, max_hours_down=3, heat_break_rpm=0):
 		self.cmd.log('Start performance test')
-		if self.read(8) == 10768:    # pinning mode 
+		if self.read(8) == V_pinn:    # pinning mode 
 			self.write(8,14000)
 		
 			init_time = dt.datetime.now()
@@ -143,7 +153,7 @@ class Cooler():
 				init_time_up = dt.datetime.now()
 				while self.PT100(spi)[0] < -210:
 					pass
-				self.write(8,10786)
+				self.write(8,V_pinn)
 
 				if reach:
 					time_up = (dt.datetime.now() - init_time_up).total_seconds()
@@ -165,7 +175,7 @@ class Cooler():
 
 				self.write(5,1)
 				time.sleep(1)
-				self.write(8,10768)
+				self.write(8,V_pinn)
 
 				if reach:
 					time_up = (dt.datetime.now() - init_time_up).total_seconds()

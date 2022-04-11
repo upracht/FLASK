@@ -1,3 +1,4 @@
+from ssl import VERIFY_ALLOW_PROXY_CERTS
 import sys
 root = "/home/pi/FLASK"
 sys.path.append(f"{root}/backend")
@@ -6,9 +7,20 @@ sys.path.append(f"{root}/backend")
 from cooler import Cooler
 from flask_restful import Resource, reqparse
 import time
+from csv import reader 
+
+with open(f"{root}/static/discrete_data.txt") as f:
+	R  = reader
+	for row in R:
+		if "-180 <" in row:
+			V_pre = int(row.split(' <=> ')[1])
+		elif "-210 <" in row:
+			V_pinn = int(row.split(' <=> ')[1])
+		else:
+			pass
 
 c = Cooler()
-class PreHandler(Resource):
+class PreHandler(Resource,V_pre):
 
 	def __init__(self, **kwargs):
 		self.parser = reqparse.RequestParser()
@@ -25,11 +37,11 @@ class PreHandler(Resource):
 			time.sleep(0.1)
 			try:
 				if state != 0:
-					c.write(8,10210)
+					c.write(8,V_pre)
 				else:
 					c.write(5,1)
 					time.sleep(1)
-					c.write(8,10210)
+					c.write(8,V_pre)
 				msg = f"Set to precool mode"
 				print(msg)
 				c.cmd_log(msg) 
@@ -43,7 +55,7 @@ class PreHandler(Resource):
 
 
 
-class PinnHandler(Resource):
+class PinnHandler(Resource, V_pinn):
 	def __init__(self, **kwargs):
 		self.parser = reqparse.RequestParser()
 		self.parser.add_argument('Pinn', type=str)
@@ -58,11 +70,11 @@ class PinnHandler(Resource):
 			time.sleep(0.1)
 			try:
 				if state != 0:
-					c.write(8,10740)
+					c.write(8,V_pinn)
 				else:
 					c.write(5,1)
 					time.sleep(1)
-					c.write(8,10740)
+					c.write(8,V_pinn)
 
 				msg = f"Set to Pinning Mode"
 				print(msg)
@@ -123,7 +135,7 @@ class OffHandler(Resource):
 		args = self.parser.parse_args()
 		if args['Off'] != '':
 			try:
-				c.write(5,0)
+				c.write(8,6001)
 				msg = f"Stopped cooler"
 				print(msg)
 				c.cmd_log(msg) 
