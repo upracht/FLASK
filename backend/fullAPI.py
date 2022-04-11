@@ -1,4 +1,3 @@
-from ssl import VERIFY_ALLOW_PROXY_CERTS
 import sys
 root = "/home/pi/FLASK"
 sys.path.append(f"{root}/backend")
@@ -9,18 +8,21 @@ from flask_restful import Resource, reqparse
 import time
 from csv import reader 
 
+
 with open(f"{root}/static/discrete_data.txt") as f:
-	R  = reader
-	for row in R:
-		if "-180 <" in row:
-			V_pre = int(row.split(' <=> ')[1])
-		elif "-210 <" in row:
-			V_pinn = int(row.split(' <=> ')[1])
-		else:
-			pass
+        R  = reader(f)
+        for cnt,row in enumerate(R):
+                if cnt == 7:
+                        V_pre = int(round(float(row[0].split(' <-> ')[1]),1))
+                elif cnt == 8:
+                        V_pinn = int(round(float(row[0].split(' <-> ')[1]),1))
+                else:
+                        pass
+print(V_pre)
+print(V_pinn)
 
 c = Cooler()
-class PreHandler(Resource,V_pre):
+class PreHandler(Resource):
 
 	def __init__(self, **kwargs):
 		self.parser = reqparse.RequestParser()
@@ -55,7 +57,7 @@ class PreHandler(Resource,V_pre):
 
 
 
-class PinnHandler(Resource, V_pinn):
+class PinnHandler(Resource):
 	def __init__(self, **kwargs):
 		self.parser = reqparse.RequestParser()
 		self.parser.add_argument('Pinn', type=str)

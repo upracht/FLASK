@@ -11,14 +11,16 @@ from zipfile import ZipFile
 from csv import reader
 
 with open(f"{root}/static/discrete_data.txt") as f:
-	R  = reader
-	for row in R:
-		if "-180 <" in row:
-			V_pre = int(row.split(' <=> ')[1])
-		elif "-210 <" in row:
-			V_pinn = int(row.split(' <=> ')[1])
+	R  = reader(f)
+	for cnt,row in enumerate(R):
+		if cnt == 7:
+			V_pre = int(round(float(row[0].split(' <-> ')[1]),1))
+		elif cnt == 8:
+			V_pinn = int(round(float(row[0].split(' <-> ')[1]),1))
 		else:
 			pass
+print(V_pre)
+print(V_pinn)
 
 class Cooler():
 	def __init__(self, error='tbd'):

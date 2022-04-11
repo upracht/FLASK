@@ -6,6 +6,7 @@ sys.path.append(f"{root}/backend")
 
 import time, os, busio, board
 import datetime as dt
+from csv import reader
 
 from flask import Flask, render_template, request, send_from_directory, send_file
 from flask_restful import Api
@@ -16,7 +17,7 @@ from plotter import plot
 
 
 # let some time pass to allow WiFi access point so build up when loaded on boot
-time.sleep(40) 
+#time.sleep(40) 
 
 
 # Initialize webframework and required APIs
@@ -39,6 +40,17 @@ sri = Cooler()
 spi = busio.SPI(board.SCK,MOSI=board.MOSI, MISO=board.MISO)
 
 
+with open(f"{root}/static/discrete_data.txt") as f:
+        R  = reader(f)
+        for cnt,row in enumerate(R):
+                if cnt == 7:
+                        V_pre = int(round(float(row[0].split(' <-> ')[1]),1))
+                elif cnt == 8:
+                        V_pinn = int(round(float(row[0].split(' <-> ')[1]),1))
+                else:
+                        pass
+print(V_pre)
+print(V_pinn)
 
 
 
